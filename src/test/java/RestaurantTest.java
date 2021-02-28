@@ -6,6 +6,9 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 class RestaurantTest {
     Restaurant restaurant;
     Restaurant mockedRestaurant;
@@ -73,6 +76,39 @@ class RestaurantTest {
 
         assertThrows(itemNotFoundException.class,
                 ()->restaurant.removeFromMenu("French fries"));
+    }
+
+    @Test
+    public void when_calculating_price_of_menu_items_with_valid_item_list_should_return_correct_amount() throws itemNotFoundException {
+        List chosenItems = getMockChosenItems();
+        assertEquals(388,restaurant.calculatePriceTotal( chosenItems));
+    }
+
+    @Test
+    public void when_calculating_price_of_menu_items_with_empty_item_list_should_return_zero() throws itemNotFoundException {
+        List chosenItems = new ArrayList<String>();
+        assertEquals(0,restaurant.calculatePriceTotal( chosenItems));
+    }
+
+    @Test
+    public void when_calculating_price_of_menu_items_with_non_existent_item_in_list_should_throw_ItemNotFoundException() {
+
+        List chosenItems = getMockChosenItems();
+        chosenItems.add("French fries");
+
+        assertThrows(itemNotFoundException.class,
+                ()->restaurant.calculatePriceTotal( chosenItems));
+    }
+
+    //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+    public List<String> getMockChosenItems(){
+
+        List chosenItems = new ArrayList<String>();
+        chosenItems.add("Sweet corn soup");
+        chosenItems.add("Vegetable lasagne");
+
+        return  chosenItems;
     }
 
 }
